@@ -1,0 +1,29 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- script: |
+    pwd 
+    cd $(Build.ArtifactStagingDirectory)    
+    echo 'echo hello world' >> deploy.sh
+    chmod +x "deploy.sh"
+
+- script: |
+    pwd 
+    cd $(Build.ArtifactStagingDirectory)
+    echo 'echo hello2' >> deploy.ps1
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'deployscripts'
+    publishLocation: 'Container'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'buildbinaries'
+    publishLocation: 'Container'
